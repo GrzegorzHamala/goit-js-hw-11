@@ -48,7 +48,7 @@ async function eventHandler(event) {
         console.log(`Current page: ${page}`);
         const lightbox = new SimpleLightbox('.gallery a', {});
 
-        if (page <= totalPages) {
+        if (page < totalPages) {
           loadBtn.addEventListener('click', () => {
             let name = searchQuery.value;
             console.log('load more images');
@@ -57,10 +57,13 @@ async function eventHandler(event) {
               renderGallery(name);
               lightbox.refresh();
               console.log(`Current page: ${page}`);
+              if (page > totalPages) {
+                Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+                loadBtn.style.display = 'none';
+              }
             });
           });
         }
-
       } else {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
