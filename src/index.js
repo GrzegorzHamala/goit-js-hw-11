@@ -26,12 +26,11 @@ async function fetchImages(name, page) {
 
 async function eventHandler(event) {
   event.preventDefault();
-  clear(gallery);
   page = 1;
-  const {
+  clear(gallery);
+   const {
     elements: { searchQuery },
   } = event.currentTarget;
-  console.log(searchQuery.value);
   let name = searchQuery.value;
   console.log(name);
   fetchImages(name, page)
@@ -43,21 +42,21 @@ async function eventHandler(event) {
 
       if (name.hits.length > 0) {
         Notiflix.Notify.success(`Hooray! We found ${name.totalHits} images.`);
-        loadBtn.style.display = 'block';
         renderGallery(name);
         console.log(`Current page: ${page}`);
         const lightbox = new SimpleLightbox('.gallery a', {});
+        loadBtn.style.display = 'block';
 
         if (page < totalPages) {
           loadBtn.addEventListener('click', () => {
             let name = searchQuery.value;
             console.log('load more images');
-            page += 1;
             fetchImages(name, page).then(name => {
               renderGallery(name);
+              page += 1;
               lightbox.refresh();
               console.log(`Current page: ${page}`);
-              if (page > totalPages) {
+              if (page >= totalPages) {
                 Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
                 loadBtn.style.display = 'none';
               }
